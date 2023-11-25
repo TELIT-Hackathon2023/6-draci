@@ -9,6 +9,10 @@
   font-family: 'Rubik';
 }
 
+html {
+  height: 100%;
+  background-color: #e9dfd5;
+}
 #top-bar {
   height: 100px;
   box-shadow: 2px;
@@ -23,4 +27,47 @@
   margin: 0 0 0 10%;
 }
 
+/* -------------- UPLOADING DATA --------------*/
+#upload-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+}
+
+#upload-box .box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  border: 1.3px solid #000000;
+  padding: 5% 10%;
+  border-radius: 100px;
+}
+#upload-box .box h1 {
+  font-size: 2.5rem;
+}
+
+#upload-box .box button {
+  background: none;
+  border: 1.3px solid #000000;
+  border-radius: 100px;
+  padding: 2% 5%;
+
+}
+#upload-box .box .button-and-input input[type=file] {
+  background: none;
+  background-color: #e84125;
+  border: 1.3px solid #000000;
+  border-radius: 100px;
+  padding: 2% 5%;
+}
+
+#upload-box .box .button-and-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 /* -------------- SHOWING DATA --------------*/
