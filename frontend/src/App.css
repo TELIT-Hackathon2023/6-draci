@@ -1,6 +1,5 @@
 
-  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;600;900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;600;900&display=swap');
 
 * {
   margin: 0;
@@ -11,20 +10,22 @@
 
 html {
   height: 100%;
-  background-color: #e9dfd5;
+  background-color: #FFFFFF;
 }
 #top-bar {
+  background-color: #E20074;
   height: 100px;
   box-shadow: 2px;
   display: flex;
   align-items: center;
-  border-bottom: 1.2px solid #000000;
+  
 }
 
 #top-bar p {
   font-size: 2rem;
   font-weight: 900;
   margin: 0 0 0 10%;
+  color: #FFFFFF;
 }
 
 /* -------------- UPLOADING DATA --------------*/
