@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Header from './Header';
 
-const UploadPDF = () => {
+const UploadPDF = (poziadajJson) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -24,6 +24,7 @@ const UploadPDF = () => {
       const response = await axios.post('http://127.0.0.1:5000/upload', formData);
 
       console.log('Upload success:', response.data);
+      poziadajJson();
     } catch (error) {
       console.error('Upload failed:', error.message);
     }
