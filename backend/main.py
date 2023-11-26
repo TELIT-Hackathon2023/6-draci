@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import os
 import nltk
 
-openai_api_key = "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"
+openai_api_key = ""
 llm = OpenAI(openai_api_key=openai_api_key)
 
 loaders = {
