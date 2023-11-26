@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import os
 import nltk
 
-openai_api_key = "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"
+openai_api_key = ""
 llm = OpenAI(openai_api_key=openai_api_key,temperature=0.9)
 
 
@@ -48,7 +48,7 @@ Penalty Clauses: Conditions under which penalties may be applied for failing to 
 Required Offer Type (Binding or Non-Binding): Clarification on whether proposals are legally binding and the associated conditions for their acceptance."""
 
 
-summary_template="""Fill given data to example in <t> </t> ,must be formated in json , starting and ending parethences
+summary_template="""Fill given data to example in <t> </t> ,must be formated in json , without parethences
 <t>
 "problem statement": "",
 "scope of the work": "",
@@ -66,8 +66,7 @@ summary_template="""Fill given data to example in <t> </t> ,must be formated in 
 
 """
 
-loadUserData = PyPDFLoader("vyhra/tes2.pdf")
-loaderFolder = DirectoryLoader('./files', glob='**/*.txt')
+
 
 template = """
 Fill given data to e
@@ -125,9 +124,23 @@ def embendingsSummary(loader, query,prompt):
 # Example usage
 #string1 = embedCriteria(loaderFolder, technical_query)
 
-def getCriteriaValues(path):
-    loadUserData = PyPDFLoader(path)
-    pdf = embendingsCriteria(loadUserData, query_pdf)
-    dataset = embendingsCriteria(loaderFolder, functinal_query)
+def getCriteriaValues(pdfPath):
+    prompts =["fuctional","technical","compliance","domain"]
+    loadUserData = PyPDFLoader(pdfPath)
+    loaderFolder = DirectoryLoader('./files', glob='**/*.txt')
+    result = []
+    for x in prompts:
+        pdf = embendingsCriteria(loadUserData,f"Summarize how is RFP file look like from {x} point of view")
+        dataset = embendingsCriteria(loaderFolder, f"Summarize how should RFP files must look like from {x} point of view")
+        r = compareEmbeddings(pdf, dataset)
+        result.append({x: r})
+    return result
+print(getCriteriaValues("vyhra/tes2.pdf"))
 
-    return compareEmbeddings(pdf,dataset)
+
+def getSummaryValues(pdfPath):
+    loadUserData = PyPDFLoader(pdfPath)
+    res = embendingsSummary(loadUserData,query_summary,summary_prompt)
+    return res
+print(getSummaryValues("vyhra/tes2.pdf"))
+
