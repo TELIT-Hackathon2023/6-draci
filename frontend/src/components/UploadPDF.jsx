@@ -11,6 +11,7 @@ const UploadPDF = () => {
   };
 
   const handleUpload = async () => {
+    
     if (!selectedFile) {
       alert('Please select a file.');
       return;
@@ -18,9 +19,9 @@ const UploadPDF = () => {
 
     try {
       const formData = new FormData();
-      formData.append('pdf', selectedFile);
+      formData.append('pdfFile', selectedFile);
 
-      const response = await axios.post('/upload', formData);
+      const response = await axios.post('http://127.0.0.1:5000/upload', formData);
 
       console.log('Upload success:', response.data);
     } catch (error) {
@@ -31,9 +32,14 @@ const UploadPDF = () => {
   return (
     <div>
         <Header/>
-      <h1>Upload PDF</h1>
-      <input type="file" accept=".pdf" name="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+        <section id='upload-box'>
+        <div className='box'>
+            <h1>Upload PDF to check RFP rating</h1>
+            <input type="file" accept=".pdf" name="file" onChange={handleFileChange} />
+            <button button onClick={handleUpload}>Upload</button>
+        
+        </div>
+        </section>
     </div>
   );
 };

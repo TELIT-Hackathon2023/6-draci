@@ -1,6 +1,5 @@
 
-  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;600;900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;600;900&display=swap');
 
 * {
   margin: 0;
@@ -9,18 +8,67 @@
   font-family: 'Rubik';
 }
 
+html {
+  height: 100%;
+  background-color: #FFFFFF;
+}
 #top-bar {
+  background-color: #E20074;
   height: 100px;
   box-shadow: 2px;
   display: flex;
   align-items: center;
-  border-bottom: 1.2px solid #000000;
+  
 }
 
 #top-bar p {
   font-size: 2rem;
   font-weight: 900;
   margin: 0 0 0 10%;
+  color: #FFFFFF;
+}
+
+/* -------------- UPLOADING DATA --------------*/
+#upload-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+}
+
+#upload-box .box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  border: 1.3px solid #000000;
+  padding: 5% 10%;
+  border-radius: 100px;
+}
+#upload-box .box h1 {
+  display: block;
+  font-size: 2.5rem;
+}
+
+#upload-box .box button {
+  background: none;
+  border: 1.3px solid #000000;
+  border-radius: 100px;
+  padding: 2% 5%;
+  width: 25%;
+  margin-top: .3em;
+
+}
+#upload-box .box input[type=file] {
+  background: none;
+  color: white;
+  background-color: #E20074;
+  width: 52%;
+  border: 1.3px solid #000000;
+  border-radius: 100px;
+  padding: 2% 5%;
+
+  margin-top: 4em;
 }
 
 /* -------------- SHOWING DATA --------------*/
