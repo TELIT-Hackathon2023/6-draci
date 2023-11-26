@@ -12,19 +12,23 @@ html {
   height: 100%;
   background-color: #FFFFFF;
 }
-#top-bar {
+.header{
   background-color: #E20074;
+}
+#top-bar {
+  margin: 0 10% 0 10%;
   height: 100px;
   box-shadow: 2px;
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   
 }
 
 #top-bar p {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 900;
-  margin: 0 0 0 10%;
   color: #FFFFFF;
 }
 
@@ -157,3 +161,34 @@ html {
 box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
 */
+
+.admin a{
+  color:white;
+  text-decoration: none;
+}
+.admin a:hover{
+  text-decoration: line-through;
+  font-size: 2rem;
+  color:#c6c6c6;
+}
+
+.select{
+  display: flex;
+  margin-left: 25%;
+  margin-right: 25%;
+  margin-top: 15%;
+  padding: 3em;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  border-radius: 100px;
+}
+
+.select h2{
+  margin-right: 1em;
+}
+
+.select form input{
+  background: none;
+  border: 1.3px solid #000000;
+  border-radius: 100px;
+  padding: 2% 5%;
+}

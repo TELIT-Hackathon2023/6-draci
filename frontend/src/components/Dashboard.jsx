@@ -6,8 +6,9 @@ import UploadPDF from './UploadPDF';
 import Score from './Score';
 import Mdashboard from './Mdashboard';
 import Summary from './Summary';
+import { Link,Route, Routes } from 'react-router-dom';
 
-skuskaJson = {
+const skuskaJson = {
         "response_schemas": [
           {"name": "problem_statement", "data": "A brief overview of the issue or need that the RFP aims to address. This sets the foundation for the proposed solution."},
           {"name": "scope_of_work", "data": "Defines the project's boundaries, detailing what tasks will be undertaken and the expected outcomes."},

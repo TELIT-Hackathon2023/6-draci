@@ -9,9 +9,11 @@ import Dashboard from './components/Dashboard';
 const App = () => {
   return (
     
-      <div id="app">
-        <Dashboard />
-      </div>
+    <Routes>
+      <Route path='/' element={<Dashboard/>}/>
+      <Route path='/adminpanel' element={<AdminPanel/>}/>
+    </Routes>
+      
   
   );
 };
