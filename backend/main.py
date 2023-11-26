@@ -1,7 +1,7 @@
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.llms import OpenAI
+from langchain.llms import  OpenAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate
 from langchain.evaluation import load_evaluator
@@ -11,8 +11,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 import os
 import nltk
 
-openai_api_key = ""
-llm = OpenAI(openai_api_key=openai_api_key)
+openai_api_key = "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"
+llm = OpenAI(openai_api_key=openai_api_key,temperature=0.9)
+
+
+
 
 loaders = {
     "technical": TextLoader("dataset_technical.txt"),
@@ -28,33 +31,52 @@ functinal_query = "Summarize how should RFP files must look like from technical 
 compliance_query = "Summarize how should RFP files must look like from compliance point of view"
 domain_query = "Summarize how should RFP files must look like from domain point of view"
 
-query_pdf = """Summarize how should RFP files must look like from function point of view", return as "F:"data",
-Summarize how should RFP files must look like from technical point of view"return as "T:"data", """
+query_pdf ="""Summarize how is RFP file look like from function point of view" """
 
-query_summary = """Write summary about document using in these points
-ROBLEM STATEMENT: A concise description of the issue or need that the RFP intends to address.
-SCOPE OF THE WORK: The boundaries of the project, including what is to be accomplished and the expected deliverables.
-REQUIRED TECHNOLOGY STACK: A list of the technology tools, frameworks, and languages that are necessary to complete the work.
-PRICING MODEL: Details about how the costs of the work will be calculated and charged. T&M or Fixed Price.
-SERVICE LEVEL AGREEMENTS (SLAS): The agreed levels of service performance and availability, as well as any penalties for non-
-compliance.
-SELECTION CRITERIA: The standards or requirements that proposals must meet to be considered for selection.
-TIMELINES: Key dates and milestones for the RFP processing schedule.
-CONTACT DETAILS: Information for the point of contact, such as name, address, phone number, and email.
-PENALTY CLAUSES: Conditions under which penalties may be applied for failure to meet the terms of the contract.
-REQUIRED OFFER TYPE (BINDING OR NON-BINDING): Whether the proposals are legally binding and the conditions under which they 
-may be binding or no"""
+query_summary="""Write summary about document using in these points,to each point write at least 3 sentences corresponding to information from document.
+For each point, there is description about what should data be :
 
-loadUserData = PyPDFLoader("test.pdf")
+Problem Statement: A brief description of the issue or requirement that the RFP aims to resolve.
+Scope of the Work: The project's boundaries, outlining what needs to be achieved and the expected deliverables.
+Required Technology Stack: A list of necessary technology tools, frameworks, and languages needed to complete the work.
+Pricing Model: Details on how the costs of the work will be calculated and charged, specifying whether it's Time and Materials (T&M) or a Fixed Price.
+Service Level Agreements (SLAs): Agreed-upon levels of service performance and availability, including penalties for non-compliance.
+Selection Criteria: The standards or requirements that proposals must meet to be considered for selection.
+Timelines: Key dates and milestones for the RFP processing schedule.
+Contact Details: Information for the point of contact, including name, address, phone number, and email.
+Penalty Clauses: Conditions under which penalties may be applied for failing to meet the terms of the contract.
+Required Offer Type (Binding or Non-Binding): Clarification on whether proposals are legally binding and the associated conditions for their acceptance."""
+
+
+summary_template="""Fill given data to example in <t> </t> ,must be formated in json , starting and ending parethences
+<t>
+"problem statement": "",
+"scope of the work": "",
+"required technology stack": "",
+"pricing model": "",
+"service level agreements (slas)": "",
+"compliance": "",
+"selection criteria": "",
+"timelines": "",
+"contact details": "",
+"penalty clauses": "",
+"required offer type (binding or non-binding)": ""
+</t>
+{context}
+
+"""
+
+loadUserData = PyPDFLoader("vyhra/tes2.pdf")
 loaderFolder = DirectoryLoader('./files', glob='**/*.txt')
-template = """Only fill json  
-Always say "thanks for asking!" at the end of the answer.
+
+template = """
+Fill given data to e
 {context}
 Question: {question}
 Helpful Answer:"""
 
-QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
 
+summary_prompt = PromptTemplate.from_template(summary_template)
 
 def compareEmbeddings(string1, string2):
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
@@ -63,44 +85,49 @@ def compareEmbeddings(string1, string2):
         prediction=string1, prediction_b=string2
     )
 
-
 def embendingsCriteria(loader, query):
+
+    data = loader.load()
+
+
+    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    texts = text_splitter.split_documents(data)
+
+    docsearch = FAISS.from_documents(texts, embeddings)
+
+    qa = RetrievalQA.from_chain_type(
+        llm=llm, chain_type="map_reduce", retriever=docsearch.as_retriever()
+    )
+
+
+    result = qa.run(query)
+    return result
+
+def embendingsSummary(loader, query,prompt):
     data = loader.load()
 
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     texts = text_splitter.split_documents(data)
-    docsearch = FAISS.from_documents(texts, embeddings)
+    if texts:
+        docsearch = FAISS.from_documents(texts, embeddings)
 
-    qa = RetrievalQA.from_chain_type(
-        llm=llm, chain_type="stuff", retriever=docsearch.as_retriever(), chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-    )
+        qa = RetrievalQA.from_chain_type(
+            llm=llm, chain_type="stuff", retriever=docsearch.as_retriever(), chain_type_kwargs={"prompt": prompt}
+        )
 
-    result = qa.run(query)
-    return result
-
-
-def embendingsSummary(loader, query):
-    data = loader.load()
-
-    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
-
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-    texts = text_splitter.split_documents(data)
-    docsearch = FAISS.from_documents(texts, embeddings)
-
-    qa = RetrievalQA.from_chain_type(
-        llm=llm, chain_type="stuff", retriever=docsearch.as_retriever(), chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-    )
-
-    result = qa.run(query)
-    return result
-
-
+        result = qa.run(query)
+        return result
+    return "Corupted FILE!!"
 # Example usage
-string1 = embedCriteria(loaderFolder, technical_query)
-string2 = embedCriteria(loadUserData, query_pdf)
-print(string1)
-print(compareEmbeddings(string1, string2))
+#string1 = embedCriteria(loaderFolder, technical_query)
 
+def getCriteriaValues(path):
+    loadUserData = PyPDFLoader(path)
+    pdf = embendingsCriteria(loadUserData, query_pdf)
+    dataset = embendingsCriteria(loaderFolder, functinal_query)
+
+    return compareEmbeddings(pdf,dataset)
