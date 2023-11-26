@@ -8,7 +8,6 @@ const AdminPanel = () => {
   return (
     <div>
       <Header />
-      <Data />
     </div>
   );
 };

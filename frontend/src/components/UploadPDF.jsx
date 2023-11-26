@@ -30,17 +30,15 @@ const UploadPDF = () => {
   };
 
   return (
-    <div>
-        <Header/>
-        <section id='upload-box'>
+        <div id='upload-box'>
         <div className='box'>
-            <h1>Upload PDF to check RFP rating</h1>
-            <input type="file" accept=".pdf" name="file" onChange={handleFileChange} />
-            <button button onClick={handleUpload}>Upload</button>
-        
+            <h1>Upload PDF</h1>
+            <div className='button-and-input'>
+                <input type="file" accept=".pdf" name="file" onChange={handleFileChange} />
+                <button onClick={handleUpload}>Upload</button>
+            </div>
         </div>
-        </section>
-    </div>
+        </div>
   );
 };
 
