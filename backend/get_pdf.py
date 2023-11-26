@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 from flask_socketio import SocketIO
 from threading import Timer
 import json
-
+import  model
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
@@ -15,6 +15,9 @@ def upload_file():
             filename = secure_filename(pdf.filename)
             custom_filename = 'check.pdf'
             pdf.save('./files/' + custom_filename)
+            summary=model.getSummaryValues(f"./files/{custom_filename}")
+            with open("output.json", "w") as json_file:
+                json.dump("{ %s }" % summary, json_file)
             return "File uploaded successfully", 200
         else:
             return "No file received", 400
@@ -44,5 +47,6 @@ def handle_connect():
         
 
 if __name__ == '__main__':
+
     app.run(debug=True)
 

@@ -127,7 +127,7 @@ def embendingsSummary(loader, query,prompt):
 def getCriteriaValues(pdfPath):
     prompts =["fuctional","technical","compliance","domain"]
     loadUserData = PyPDFLoader(pdfPath)
-    loaderFolder = DirectoryLoader('./files', glob='**/*.txt')
+    loaderFolder = DirectoryLoader('.././datasets', glob='**/*.txt')
     result = []
     for x in prompts:
         pdf = embendingsCriteria(loadUserData,f"Summarize how is RFP file look like from {x} point of view")
@@ -135,12 +135,12 @@ def getCriteriaValues(pdfPath):
         r = compareEmbeddings(pdf, dataset)
         result.append({x: r})
     return result
-print(getCriteriaValues("vyhra/tes2.pdf"))
+#print(getCriteriaValues("files/tes2.pdf"))
 
 
 def getSummaryValues(pdfPath):
     loadUserData = PyPDFLoader(pdfPath)
     res = embendingsSummary(loadUserData,query_summary,summary_prompt)
     return res
-print(getSummaryValues("vyhra/tes2.pdf"))
+
 
