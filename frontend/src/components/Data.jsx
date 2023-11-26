@@ -1,14 +1,16 @@
 import React from 'react';
+import Header from './Header'
 
 const Data = () => {
 
-  return (
+return (
     <div>
-      <section id="data">
+    <Header />
+        <section id="data">
             <p>
                 DATA
             </p>
-      </section>
+        </section>
     </div>
   );
 };
